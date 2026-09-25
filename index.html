@@ -1,0 +1,3638 @@
+
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#08111f">
+<title>Pixel Forge 5</title>
+
+<style>
+:root{
+  --bg:#07101d;
+  --panel:rgba(11,22,38,.88);
+  --panel2:rgba(15,31,51,.94);
+  --line:rgba(255,255,255,.10);
+  --text:#f3f7ff;
+  --muted:#93a8bf;
+  --cyan:#58d7ff;
+  --blue:#4f7cff;
+  --green:#55e68a;
+  --yellow:#ffd45c;
+  --orange:#ff9d52;
+  --red:#ff5f73;
+  --purple:#b58bff;
+  --shadow:0 18px 55px rgba(0,0,0,.35);
+}
+
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent
+}
+
+html,body{
+  margin:0;
+  width:100%;
+  min-height:100%;
+  background:
+    radial-gradient(circle at 15% 0%,rgba(61,106,185,.18),transparent 35%),
+    radial-gradient(circle at 90% 10%,rgba(91,39,144,.15),transparent 30%),
+    var(--bg);
+  color:var(--text);
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  overflow-x:hidden;
+}
+
+body{
+  padding:
+    max(8px,env(safe-area-inset-top))
+    max(8px,env(safe-area-inset-right))
+    max(8px,env(safe-area-inset-bottom))
+    max(8px,env(safe-area-inset-left));
+}
+
+button{
+  font:inherit;
+  color:inherit;
+}
+
+#app{
+  max-width:1280px;
+  margin:0 auto;
+  padding:8px;
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  background:rgba(7,16,29,.75);
+  backdrop-filter:blur(18px);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:10px 12px;
+  position:sticky;
+  top:8px;
+  z-index:20;
+  box-shadow:var(--shadow);
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+}
+
+.logo{
+  width:42px;
+  height:42px;
+  flex:none;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  font-size:24px;
+  font-weight:900;
+  background:linear-gradient(145deg,#69e6ff,#536dff 55%,#9f4cff);
+  box-shadow:0 8px 30px rgba(73,128,255,.32);
+}
+
+.brand h1{
+  font-size:16px;
+  margin:0;
+  white-space:nowrap;
+}
+
+.brand p{
+  font-size:11px;
+  color:var(--muted);
+  margin:2px 0 0;
+  white-space:nowrap;
+}
+
+.money{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  background:rgba(255,212,92,.08);
+  border:1px solid rgba(255,212,92,.2);
+  padding:8px 10px;
+  border-radius:12px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.layout{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 340px;
+  gap:12px;
+  margin-top:12px;
+}
+
+.game-shell,
+.side{
+  border:1px solid var(--line);
+  background:var(--panel);
+  border-radius:22px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+
+.game-head{
+  padding:12px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  align-items:center;
+}
+
+.section-title{
+  font-weight:900;
+}
+
+.status{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.canvas-wrap{
+  padding:8px;
+  background:linear-gradient(180deg,#0a1422,#08111b);
+}
+
+#game{
+  width:100%;
+  height:auto;
+  display:block;
+  border-radius:16px;
+  background:#101b2a;
+  touch-action:none;
+}
+
+.controls{
+  padding:10px;
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:8px;
+}
+
+.btn{
+  min-height:48px;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(27,44,66,.96),
+      rgba(16,29,47,.96)
+    );
+  font-weight:800;
+  cursor:pointer;
+  box-shadow:0 6px 18px rgba(0,0,0,.2);
+}
+
+.btn:active{
+  transform:translateY(1px);
+  filter:brightness(1.12);
+}
+
+.btn.primary{
+  background:linear-gradient(135deg,#3c8dff,#6a5df4);
+  border-color:rgba(255,255,255,.16);
+}
+
+.btn.good{
+  background:linear-gradient(135deg,#1f9e69,#2fbb7d);
+}
+
+.btn.warn{
+  background:linear-gradient(135deg,#b97c20,#e5a73e);
+}
+
+.btn.danger{
+  background:linear-gradient(135deg,#aa3854,#db506a);
+}
+
+.side{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+}
+
+.tabs{
+  display:flex;
+  border-bottom:1px solid var(--line);
+}
+
+.tab{
+  flex:1;
+  padding:12px 8px;
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:800;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+}
+
+.tab.active{
+  color:#fff;
+  background:rgba(88,215,255,.08);
+}
+
+.tab-panel{
+  display:none;
+  padding:12px;
+}
+
+.tab-panel.active{
+  display:block;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.stat{
+  padding:11px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:rgba(255,255,255,.025);
+}
+
+.stat small{
+  color:var(--muted);
+  display:block;
+  font-size:10px;
+  margin-bottom:4px;
+}
+
+.stat strong{
+  font-size:18px;
+}
+
+.card{
+  margin-top:10px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:12px;
+  background:rgba(255,255,255,.025);
+}
+
+.card h3{
+  font-size:13px;
+  margin:0 0 8px;
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+}
+
+.progress{
+  height:8px;
+  background:#07101a;
+  border-radius:99px;
+  overflow:hidden;
+  margin-top:8px;
+}
+
+.progress i{
+  display:block;
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,var(--cyan),var(--blue));
+  border-radius:inherit;
+}
+
+.task{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.task:last-child{
+  border-bottom:0;
+}
+
+.dot{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:var(--green);
+  flex:none;
+}
+
+.dot.lock{
+  background:#718197;
+}
+
+.dot.hot{
+  background:var(--orange);
+}
+
+.task span{
+  font-size:12px;
+  flex:1;
+}
+
+.task b{
+  font-size:11px;
+  color:var(--yellow);
+}
+
+.upgrade{
+  display:grid;
+  gap:8px;
+}
+
+.upgrade-item{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:8px;
+  align-items:center;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:9px;
+}
+
+.upgrade-item small{
+  display:block;
+  color:var(--muted);
+  margin-top:2px;
+}
+
+.log{
+  max-height:210px;
+  overflow:auto;
+  font-size:11px;
+  color:#c7d3e2;
+}
+
+.log div{
+  padding:5px 0;
+  border-bottom:1px dashed rgba(255,255,255,.06);
+}
+
+.mobile-note{
+  display:none;
+  color:var(--muted);
+  font-size:10px;
+  padding:0 10px 10px;
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:20px;
+  transform:translateX(-50%) translateY(25px);
+  background:#122237;
+  border:1px solid rgba(255,255,255,.12);
+  padding:11px 14px;
+  border-radius:14px;
+  box-shadow:var(--shadow);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:50;
+  font-size:12px;
+  font-weight:700;
+  max-width:min(92vw,440px);
+  text-align:center;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+@media(max-width:900px){
+
+  #app{
+    padding:4px;
+  }
+
+  .topbar{
+    top:4px;
+    border-radius:16px;
+  }
+
+  .layout{
+    grid-template-columns:1fr;
+  }
+
+  .game-shell{
+    order:0;
+  }
+
+  .side{
+    order:1;
+  }
+}
+
+@media(max-width:560px){
+
+  .brand p{
+    display:none;
+  }
+
+  .brand h1{
+    font-size:14px;
+  }
+
+  .logo{
+    width:38px;
+    height:38px;
+    font-size:20px;
+  }
+
+  .money{
+    font-size:11px;
+    padding:7px 8px;
+  }
+
+  .game-head{
+    padding:9px;
+  }
+
+  .controls{
+    grid-template-columns:repeat(3,1fr);
+    padding:7px;
+    gap:6px;
+  }
+
+  .btn{
+    min-height:52px;
+    padding:8px 5px;
+    font-size:11px;
+  }
+
+  .mobile-note{
+    display:block;
+  }
+
+  .tab-panel{
+    padding:9px;
+  }
+
+  .stats{
+    gap:6px;
+  }
+
+  .stat{
+    padding:9px;
+  }
+
+  .stat strong{
+    font-size:16px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+<header class="topbar">
+
+  <div class="brand">
+
+    <div class="logo">
+      ⚒
+    </div>
+
+    <div>
+
+      <h1>
+        PIXEL FORGE 5
+      </h1>
+
+      <p>
+        Forge District · цех живёт даже когда ты смотришь в меню
+      </p>
+
+    </div>
+
+  </div>
+
+  <div class="money">
+    🪙
+    <span id="moneyTop">1200</span>
+  </div>
+
+</header>
+
+
+<main class="layout">
+
+
+<section class="game-shell">
+
+  <div class="game-head">
+
+    <div>
+
+      <div class="section-title">
+        Производственный цех
+      </div>
+
+      <div class="status" id="statusText">
+        Смена началась · всё работает
+      </div>
+
+    </div>
+
+    <div class="status">
+      День <b id="dayText">1</b>
+    </div>
+
+  </div>
+
+
+  <div class="canvas-wrap">
+
+    <canvas
+      id="game"
+      width="960"
+      height="590">
+    </canvas>
+
+  </div>
+
+
+  <div class="mobile-note">
+    Телефон: веди пальцем по экрану или используй кнопки ниже.
+    Нажатие по станку открывает его панель.
+  </div>
+
+
+  <div class="controls">
+
+    <button class="btn primary" id="btnRun">
+      ▶ Смена
+    </button>
+
+    <button class="btn" id="btnBoost">
+      ⚡ Ускорить
+    </button>
+
+    <button class="btn good" id="btnCollect">
+      💰 Собрать
+    </button>
+
+  </div>
+
+
+  <div class="footer">
+    WASD / стрелки — движение · E — работа у станка · SPACE — ускорение
+  </div>
+
+</section>
+
+
+<aside class="side">
+
+  <div class="tabs">
+
+    <button
+      class="tab active"
+      data-tab="overview">
+      Цех
+    </button>
+
+    <button
+      class="tab"
+      data-tab="tasks">
+      Задания
+    </button>
+
+    <button
+      class="tab"
+      data-tab="upgrades">
+      Развитие
+    </button>
+
+  </div>
+
+
+  <div
+    class="tab-panel active"
+    id="tab-overview">
+
+    <div class="stats">
+
+      <div class="stat">
+        <small>Выручка</small>
+        <strong id="revenue">0</strong> ₽
+      </div>
+
+      <div class="stat">
+        <small>Заказов</small>
+        <strong id="orders">0</strong>
+      </div>
+
+      <div class="stat">
+        <small>Качество</small>
+        <strong id="quality">100</strong>%
+      </div>
+
+      <div class="stat">
+        <small>Энергия</small>
+        <strong id="energy">100</strong>%
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <div class="row">
+
+        <h3>
+          Поток производства
+        </h3>
+
+        <b id="flowLabel">
+          0%
+        </b>
+
+      </div>
+
+      <div class="progress">
+        <i id="flowBar"></i>
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <h3>
+        Состояние оборудования
+      </h3>
+
+
+      <div class="row">
+        <span style="font-size:11px">
+          Магнитный цилиндр
+        </span>
+        <b id="machineA">
+          92%
+        </b>
+      </div>
+
+      <div class="progress">
+        <i
+          id="machineBarA"
+          style="width:92%">
+        </i>
+      </div>
+
+
+      <div
+        class="row"
+        style="margin-top:9px">
+
+        <span style="font-size:11px">
+          Пресс
+        </span>
+
+        <b id="machineB">
+          85%
+        </b>
+
+      </div>
+
+      <div class="progress">
+        <i
+          id="machineBarB"
+          style="width:85%">
+        </i>
+      </div>
+
+
+      <div
+        class="row"
+        style="margin-top:9px">
+
+        <span style="font-size:11px">
+          Упаковка
+        </span>
+
+        <b id="machineC">
+          97%
+        </b>
+
+      </div>
+
+      <div class="progress">
+        <i
+          id="machineBarC"
+          style="width:97%">
+        </i>
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <h3>
+        События
+      </h3>
+
+      <div
+        class="log"
+        id="eventLog">
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div
+    class="tab-panel"
+    id="tab-tasks">
+
+    <div
+      class="card"
+      style="margin-top:0">
+
+      <h3>
+        Активные заказы
+      </h3>
+
+      <div id="taskList"></div>
+
+    </div>
+
+  </div>
+
+
+  <div
+    class="tab-panel"
+    id="tab-upgrades">
+
+    <div
+      class="card"
+      style="margin-top:0">
+
+      <h3>
+        Улучшения
+      </h3>
+
+      <div
+        class="upgrade"
+        id="upgradeList">
+      </div>
+
+    </div>
+
+  </div>
+
+</aside>
+
+</main>
+
+</div>
+
+
+<div
+  class="toast"
+  id="toast">
+</div>
+
+
+<script>
+(() => {
+
+"use strict";
+
+
+const canvas =
+  document.getElementById("game");
+
+const ctx =
+  canvas.getContext("2d");
+
+
+const ui = {
+
+  moneyTop:
+    document.getElementById("moneyTop"),
+
+  dayText:
+    document.getElementById("dayText"),
+
+  statusText:
+    document.getElementById("statusText"),
+
+  revenue:
+    document.getElementById("revenue"),
+
+  orders:
+    document.getElementById("orders"),
+
+  quality:
+    document.getElementById("quality"),
+
+  energy:
+    document.getElementById("energy"),
+
+  flowLabel:
+    document.getElementById("flowLabel"),
+
+  flowBar:
+    document.getElementById("flowBar"),
+
+  machineA:
+    document.getElementById("machineA"),
+
+  machineB:
+    document.getElementById("machineB"),
+
+  machineC:
+    document.getElementById("machineC"),
+
+  machineBarA:
+    document.getElementById("machineBarA"),
+
+  machineBarB:
+    document.getElementById("machineBarB"),
+
+  machineBarC:
+    document.getElementById("machineBarC"),
+
+  eventLog:
+    document.getElementById("eventLog"),
+
+  taskList:
+    document.getElementById("taskList"),
+
+  upgradeList:
+    document.getElementById("upgradeList"),
+
+  toast:
+    document.getElementById("toast")
+
+};
+
+
+const world = {
+
+  width:960,
+
+  height:590,
+
+  time:0,
+
+  running:true,
+
+  boost:false,
+
+  day:1,
+
+  money:1200,
+
+  revenue:0,
+
+  orders:0,
+
+  quality:100,
+
+  energy:100,
+
+  flow:0,
+
+  collected:0,
+
+  selectedMachine:null,
+
+  particles:[],
+
+  machines:[],
+
+  workers:[],
+
+  forklifts:[],
+
+  crates:[],
+
+  decorations:[]
+
+};
+
+
+const keys =
+  Object.create(null);
+
+
+let toastTimer =
+  null;
+
+
+const machineDefs = [
+
+  {
+    id:"press",
+    name:"ПРЕСС-01",
+    x:530,
+    y:315,
+    w:155,
+    h:108,
+    color:"#5c83ff",
+    work:1.0,
+    hp:92,
+    type:"Станок"
+  },
+
+  {
+    id:"cyl",
+    name:"CYLINDER LAB",
+    x:725,
+    y:215,
+    w:160,
+    h:108,
+    color:"#58d7ff",
+    work:1.3,
+    hp:85,
+    type:"Магнитный участок"
+  },
+
+  {
+    id:"pack",
+    name:"PACK-02",
+    x:720,
+    y:395,
+    w:160,
+    h:100,
+    color:"#5bd998",
+    work:0.8,
+    hp:97,
+    type:"Упаковка"
+  },
+
+  {
+    id:"qc",
+    name:"QC STATION",
+    x:500,
+    y:450,
+    w:155,
+    h:88,
+    color:"#ffbd5a",
+    work:0.7,
+    hp:100,
+    type:"Контроль"
+  }
+
+];
+
+
+const taskDefs = [
+
+  {
+    id:"t1",
+    name:"1000 этикеток",
+    reward:260,
+    progress:0,
+    need:12,
+    done:false
+  },
+
+  {
+    id:"t2",
+    name:"Срочный заказ",
+    reward:420,
+    progress:0,
+    need:20,
+    done:false,
+    hot:true
+  },
+
+  {
+    id:"t3",
+    name:"Контроль качества",
+    reward:180,
+    progress:0,
+    need:8,
+    done:false
+  }
+
+];
+
+
+const upgrades = [
+
+  {
+    id:"speed",
+    name:"Мотор привода",
+    desc:"Станки работают быстрее",
+    cost:450,
+    level:0,
+    max:5
+  },
+
+  {
+    id:"quality",
+    name:"Оптический контроль",
+    desc:"Повышает качество",
+    cost:520,
+    level:0,
+    max:5
+  },
+
+  {
+    id:"energy",
+    name:"Энерго-модуль",
+    desc:"Медленнее расходует энергию",
+    cost:380,
+    level:0,
+    max:5
+  },
+
+  {
+    id:"staff",
+    name:"Команда смены",
+    desc:"Нанимает автоматических рабочих",
+    cost:650,
+    level:0,
+    max:5
+  }
+
+];
+
+
+function clamp(v,a,b){
+
+  return Math.max(
+    a,
+    Math.min(b,v)
+  );
+
+}
+
+
+function money(n){
+
+  return Math.round(n)
+    .toLocaleString("ru-RU");
+
+}
+
+
+function random(a,b){
+
+  return a + Math.random()*(b-a);
+
+}
+
+
+function log(message){
+
+  const div =
+    document.createElement("div");
+
+  div.textContent =
+    "• " + message;
+
+  ui.eventLog.prepend(div);
+
+  while(
+    ui.eventLog.children.length > 16
+  ){
+
+    ui.eventLog.removeChild(
+      ui.eventLog.lastChild
+    );
+
+  }
+
+}
+
+
+function toast(message){
+
+  ui.toast.textContent =
+    message;
+
+  ui.toast.classList.add("show");
+
+  clearTimeout(
+    toastTimer
+  );
+
+  toastTimer =
+    setTimeout(
+      () =>
+        ui.toast.classList.remove("show"),
+      1800
+    );
+
+}
+
+
+function addParticle(
+  x,
+  y,
+  vx,
+  vy,
+  life,
+  text,
+  color
+){
+
+  world.particles.push({
+    x,
+    y,
+    vx,
+    vy,
+    life,
+    maxLife:life,
+    text,
+    color
+  });
+
+}
+
+
+function initWorld(){
+
+  world.machines =
+    machineDefs.map(
+      m => ({
+        ...m,
+        pulse:random(
+          0,
+          Math.PI*2
+        )
+      })
+    );
+
+
+  world.workers = [
+
+    {
+      name:"Антон",
+      x:250,
+      y:255,
+      tx:500,
+      ty:310,
+      speed:1.0,
+      color:"#6bdcff",
+      state:"work",
+      timer:0
+    },
+
+    {
+      name:"Лена",
+      x:340,
+      y:400,
+      tx:730,
+      ty:250,
+      speed:1.1,
+      color:"#ff9c77",
+      state:"work",
+      timer:1
+    },
+
+    {
+      name:"Илья",
+      x:455,
+      y:190,
+      tx:770,
+      ty:440,
+      speed:.9,
+      color:"#a98cff",
+      state:"walk",
+      timer:2
+    },
+
+    {
+      name:"Олег",
+      x:190,
+      y:470,
+      tx:530,
+      ty:490,
+      speed:1.25,
+      color:"#78e39a",
+      state:"walk",
+      timer:0
+    }
+
+  ];
+
+
+  for(
+    let i=0;
+    i<5;
+    i++
+  ){
+
+    world.forklifts.push({
+
+      x:random(110,430),
+
+      y:random(130,500),
+
+      vx:random(-.35,.35),
+
+      vy:0,
+
+      dir:
+        Math.random()>.5
+        ? 1
+        : -1,
+
+      phase:
+        random(0,10)
+
+    });
+
+  }
+
+
+  for(
+    let i=0;
+    i<10;
+    i++
+  ){
+
+    world.crates.push({
+
+      x:random(90,430),
+
+      y:random(150,515),
+
+      w:random(24,38),
+
+      h:random(18,28),
+
+      c:
+        Math.random()>.5
+        ? "#9a653f"
+        : "#7f5235"
+
+    });
+
+  }
+
+
+  for(
+    let i=0;
+    i<55;
+    i++
+  ){
+
+    world.decorations.push({
+
+      x:random(30,930),
+
+      y:random(105,550),
+
+      t:
+        Math.floor(
+          random(0,5)
+        ),
+
+      a:random(.2,.7)
+
+    });
+
+  }
+
+
+  log(
+    "Смена открыта. Производство запущено."
+  );
+
+  log(
+    "Рабочие распределились по участкам."
+  );
+
+  log(
+    "Новый срочный заказ добавлен в очередь."
+  );
+
+  log(
+    "Подсказка: нажми на станок."
+  );
+
+}
+
+
+function drawRoundedRect(
+  x,
+  y,
+  w,
+  h,
+  r,
+  fill,
+  stroke
+){
+
+  const rr =
+    Math.min(
+      r,
+      Math.abs(w)/2,
+      Math.abs(h)/2
+    );
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    x+rr,
+    y
+  );
+
+  ctx.arcTo(
+    x+w,
+    y,
+    x+w,
+    y+h,
+    rr
+  );
+
+  ctx.arcTo(
+    x+w,
+    y+h,
+    x,
+    y+h,
+    rr
+  );
+
+  ctx.arcTo(
+    x,
+    y+h,
+    x,
+    y,
+    rr
+  );
+
+  ctx.arcTo(
+    x,
+    y,
+    x+w,
+    y,
+    rr
+  );
+
+  ctx.closePath();
+
+
+  if(fill){
+
+    ctx.fillStyle =
+      fill;
+
+    ctx.fill();
+
+  }
+
+
+  if(stroke){
+
+    ctx.strokeStyle =
+      stroke;
+
+    ctx.stroke();
+
+  }
+
+}
+
+
+function drawBackground(){
+
+  const g =
+    ctx.createLinearGradient(
+      0,
+      0,
+      0,
+      world.height
+    );
+
+
+  g.addColorStop(
+    0,
+    "#122237"
+  );
+
+  g.addColorStop(
+    .58,
+    "#162638"
+  );
+
+  g.addColorStop(
+    1,
+    "#0e1724"
+  );
+
+
+  ctx.fillStyle=g;
+
+  ctx.fillRect(
+    0,
+    0,
+    world.width,
+    world.height
+  );
+
+
+  ctx.fillStyle=
+    "#0b1320";
+
+  ctx.fillRect(
+    0,
+    100,
+    960,
+    490
+  );
+
+
+  for(
+    let x=70;
+    x<930;
+    x+=90
+  ){
+
+    ctx.fillStyle=
+      "rgba(116,200,255,.14)";
+
+    ctx.fillRect(
+      x,
+      66,
+      48,
+      5
+    );
+
+    ctx.fillStyle=
+      "rgba(200,240,255,.65)";
+
+    ctx.fillRect(
+      x+18,
+      70,
+      12,
+      3
+    );
+
+  }
+
+
+  ctx.strokeStyle=
+    "rgba(135,173,202,.09)";
+
+  ctx.lineWidth=1;
+
+
+  for(
+    let x=0;
+    x<=960;
+    x+=42
+  ){
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+      x,
+      102
+    );
+
+    ctx.lineTo(
+      x,
+      590
+    );
+
+    ctx.stroke();
+
+  }
+
+
+  for(
+    let y=120;
+    y<=590;
+    y+=38
+  ){
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+      0,
+      y
+    );
+
+    ctx.lineTo(
+      960,
+      y
+    );
+
+    ctx.stroke();
+
+  }
+
+
+  ctx.fillStyle=
+    "rgba(255,194,69,.12)";
+
+  ctx.fillRect(
+    52,
+    106,
+    14,
+    474
+  );
+
+  ctx.fillRect(
+    444,
+    106,
+    14,
+    474
+  );
+
+
+  ctx.fillStyle=
+    "rgba(255,215,104,.55)";
+
+
+  for(
+    let y=116;
+    y<570;
+    y+=32
+  ){
+
+    ctx.fillRect(
+      52,
+      y,
+      14,
+      16
+    );
+
+    ctx.fillRect(
+      444,
+      y,
+      14,
+      16
+    );
+
+  }
+
+
+  drawRoundedRect(
+    72,
+    122,
+    325,
+    138,
+    16,
+    "rgba(24,44,65,.92)",
+    "rgba(135,187,227,.18)"
+  );
+
+
+  ctx.fillStyle=
+    "#8fb0cf";
+
+  ctx.font=
+    "700 12px system-ui";
+
+  ctx.fillText(
+    "DISPATCH / OFFICE",
+    92,
+    145
+  );
+
+
+  ctx.fillStyle=
+    "rgba(88,215,255,.18)";
+
+  ctx.fillRect(
+    90,
+    157,
+    290,
+    74
+  );
+
+
+  ctx.fillStyle=
+    "rgba(255,255,255,.12)";
+
+
+  for(
+    let i=0;
+    i<7;
+    i++
+  ){
+
+    ctx.fillRect(
+      105+i*38,
+      170,
+      22,
+      8
+    );
+
+  }
+
+
+  for(
+    let i=0;
+    i<5;
+    i++
+  ){
+
+    ctx.fillRect(
+      112+i*52,
+      194,
+      31,
+      6
+    );
+
+  }
+
+
+  for(
+    let i=0;
+    i<2;
+    i++
+  ){
+
+    const x =
+      90+i*170;
+
+    drawRoundedRect(
+      x,
+      385,
+      130,
+      135,
+      10,
+      "#111d2d",
+      "rgba(255,255,255,.09)"
+    );
+
+
+    ctx.fillStyle=
+      "rgba(255,255,255,.05)";
+
+    ctx.fillRect(
+      x+10,
+      397,
+      110,
+      102
+    );
+
+
+    for(
+      let y=405;
+      y<490;
+      y+=16
+    ){
+
+      ctx.fillRect(
+        x+12,
+        y,
+        106,
+        2
+      );
+
+    }
+
+  }
+
+
+  drawRoundedRect(
+    520,
+    118,
+    370,
+    52,
+    12,
+    "rgba(9,17,29,.85)",
+    "rgba(255,255,255,.08)"
+  );
+
+
+  ctx.fillStyle=
+    "#cfe0f3";
+
+  ctx.font=
+    "800 14px system-ui";
+
+  ctx.fillText(
+    "FORGE DISTRICT // SHIFT CONTROL",
+    542,
+    140
+  );
+
+
+  ctx.fillStyle=
+    "#7087a0";
+
+  ctx.font=
+    "10px system-ui";
+
+  ctx.fillText(
+    "AUTOMATION ONLINE · QC ACTIVE · NETWORK STABLE",
+    542,
+    157
+  );
+
+}
+
+
+function drawCrates(){
+
+  for(
+    const c of world.crates
+  ){
+
+    drawRoundedRect(
+      c.x,
+      c.y,
+      c.w,
+      c.h,
+      4,
+      c.c,
+      "rgba(0,0,0,.18)"
+    );
+
+
+    ctx.strokeStyle=
+      "rgba(250,210,150,.2)";
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+      c.x+4,
+      c.y+4
+    );
+
+    ctx.lineTo(
+      c.x+c.w-4,
+      c.y+c.h-4
+    );
+
+
+    ctx.moveTo(
+      c.x+c.w-4,
+      c.y+4
+    );
+
+    ctx.lineTo(
+      c.x+4,
+      c.y+c.h-4
+    );
+
+    ctx.stroke();
+
+  }
+
+}
+
+
+function drawMachines(){
+
+  for(
+    const m of world.machines
+  ){
+
+    const selected =
+      world.selectedMachine===m.id;
+
+
+    const pulse =
+      .5 +
+      .5 *
+      Math.sin(
+        world.time*.004+
+        m.pulse
+      );
+
+
+    drawRoundedRect(
+      m.x,
+      m.y,
+      m.w,
+      m.h,
+      14,
+      selected
+        ? "rgba(40,64,94,.98)"
+        : "rgba(24,37,53,.97)",
+      selected
+        ? m.color
+        : "rgba(255,255,255,.08)"
+    );
+
+
+    ctx.fillStyle=
+      m.color;
+
+    ctx.globalAlpha=
+      .55+.35*pulse;
+
+
+    ctx.fillRect(
+      m.x+15,
+      m.y+12,
+      m.w-30,
+      4
+    );
+
+
+    ctx.globalAlpha=1;
+
+
+    ctx.fillStyle=
+      "#dce9f7";
+
+    ctx.font=
+      "900 12px system-ui";
+
+
+    ctx.fillText(
+      m.name,
+      m.x+14,
+      m.y+34
+    );
+
+
+    ctx.fillStyle=
+      "rgba(0,0,0,.22)";
+
+    ctx.fillRect(
+      m.x+14,
+      m.y+48,
+      m.w-28,
+      m.h-61
+    );
+
+
+    ctx.fillStyle=
+      m.color;
+
+    ctx.globalAlpha=.85;
+
+
+    ctx.fillRect(
+      m.x+25,
+      m.y+61,
+      22,
+      18
+    );
+
+
+    ctx.globalAlpha=1;
+
+
+    ctx.fillStyle=
+      "#90a6bc";
+
+    ctx.font=
+      "9px system-ui";
+
+
+    ctx.fillText(
+      m.type,
+      m.x+56,
+      m.y+73
+    );
+
+
+    ctx.fillStyle=
+      m.color;
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+      m.x+m.w-25,
+      m.y+20,
+      4+2*pulse,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    if(selected){
+
+      ctx.strokeStyle=
+        m.color;
+
+      ctx.lineWidth=2;
+
+      ctx.setLineDash([
+        5,
+        4
+      ]);
+
+
+      ctx.strokeRect(
+        m.x-6,
+        m.y-6,
+        m.w+12,
+        m.h+12
+      );
+
+
+      ctx.setLineDash([]);
+
+    }
+
+  }
+
+}
+
+
+function drawForklifts(){
+
+  for(
+    const f of world.forklifts
+  ){
+
+    f.x += f.vx;
+
+    f.phase += .03;
+
+
+    if(f.x<90){
+
+      f.x=90;
+
+      f.vx=
+        Math.abs(f.vx);
+
+    }
+
+
+    if(f.x>430){
+
+      f.x=430;
+
+      f.vx=
+        -Math.abs(f.vx);
+
+    }
+
+
+    const bob =
+      Math.sin(
+        f.phase
+      )*1.2;
+
+
+    drawRoundedRect(
+      f.x,
+      f.y+bob,
+      32,
+      19,
+      5,
+      "#d79c43",
+      "rgba(255,230,160,.3)"
+    );
+
+
+    ctx.fillStyle=
+      "#223146";
+
+    ctx.fillRect(
+      f.x+22,
+      f.y+bob-7,
+      5,
+      27
+    );
+
+
+    ctx.fillStyle=
+      "#0a1019";
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+      f.x+8,
+      f.y+bob+20,
+      4,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+      f.x+25,
+      f.y+bob+20,
+      4,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+
+  }
+
+}
+
+
+function drawWorker(w){
+
+  ctx.fillStyle=
+    "rgba(0,0,0,.28)";
+
+
+  ctx.beginPath();
+
+  ctx.ellipse(
+    w.x,
+    w.y+14,
+    11,
+    4,
+    0,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+
+  ctx.strokeStyle=
+    "#1e2836";
+
+  ctx.lineWidth=5;
+
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    w.x-4,
+    w.y+7
+  );
+
+  ctx.lineTo(
+    w.x-5,
+    w.y+16
+  );
+
+
+  ctx.moveTo(
+    w.x+4,
+    w.y+7
+  );
+
+  ctx.lineTo(
+    w.x+5,
+    w.y+16
+  );
+
+  ctx.stroke();
+
+
+  ctx.fillStyle=
+    w.color;
+
+
+  drawRoundedRect(
+    w.x-8,
+    w.y-1,
+    16,
+    17,
+    5,
+    w.color
+  );
+
+
+  ctx.fillStyle=
+    "#f0c29c";
+
+
+  ctx.beginPath();
+
+  ctx.arc(
+    w.x,
+    w.y-7,
+    7,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+
+  ctx.fillStyle=
+    "#e8edf4";
+
+
+  ctx.beginPath();
+
+  ctx.arc(
+    w.x,
+    w.y-9,
+    8,
+    Math.PI,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+
+  ctx.fillStyle=
+    "#d9e6f4";
+
+  ctx.font=
+    "8px system-ui";
+
+  ctx.textAlign=
+    "center";
+
+
+  ctx.fillText(
+    w.name,
+    w.x,
+    w.y-19
+  );
+
+
+  ctx.textAlign=
+    "left";
+
+}
+
+
+function updateWorker(
+  w,
+  dt
+){
+
+  const dx =
+    w.tx-w.x;
+
+  const dy =
+    w.ty-w.y;
+
+  const dist =
+    Math.hypot(
+      dx,
+      dy
+    );
+
+
+  if(dist<5){
+
+    w.timer += dt;
+
+
+    if(w.timer>2.5){
+
+      w.timer=0;
+
+
+      const targets=[
+
+        [520,315],
+        [725,250],
+        [790,445],
+        [540,490],
+        [260,200],
+        [300,470]
+
+      ];
+
+
+      const t =
+        targets[
+          Math.floor(
+            Math.random()*
+            targets.length
+          )
+        ];
+
+
+      w.tx=t[0];
+      w.ty=t[1];
+
+      w.state="walk";
+
+    }else{
+
+      w.state="work";
+
+    }
+
+  }else{
+
+    const sp =
+      w.speed *
+      (world.boost ? 1.7 : 1);
+
+
+    w.x +=
+      dx/dist *
+      sp *
+      dt *
+      60;
+
+
+    w.y +=
+      dy/dist *
+      sp *
+      dt *
+      60;
+
+
+    w.state="walk";
+
+  }
+
+}
+
+
+function drawParticles(dt){
+
+  for(
+    const p of world.particles
+  ){
+
+    p.x +=
+      p.vx *
+      dt *
+      60;
+
+
+    p.y +=
+      p.vy *
+      dt *
+      60;
+
+
+    p.vy +=
+      .018 *
+      dt *
+      60;
+
+
+    p.life -= dt;
+
+
+    const a =
+      clamp(
+        p.life/p.maxLife,
+        0,
+        1
+      );
+
+
+    ctx.globalAlpha=a;
+
+    ctx.fillStyle=
+      p.color;
+
+    ctx.font=
+      "800 12px system-ui";
+
+
+    ctx.fillText(
+      p.text,
+      p.x,
+      p.y
+    );
+
+  }
+
+
+  ctx.globalAlpha=1;
+
+
+  world.particles =
+    world.particles.filter(
+      p => p.life>0
+    );
+
+}
+
+
+function drawHudOnCanvas(){
+
+  drawRoundedRect(
+    18,
+    18,
+    270,
+    54,
+    14,
+    "rgba(6,13,23,.75)",
+    "rgba(255,255,255,.08)"
+  );
+
+
+  ctx.fillStyle=
+    "#dce8f5";
+
+  ctx.font=
+    "800 13px system-ui";
+
+
+  ctx.fillText(
+    world.running
+      ? "● PRODUCTION ONLINE"
+      : "● PAUSED",
+    32,
+    40
+  );
+
+
+  ctx.fillStyle=
+    world.running
+      ? "#55e68a"
+      : "#ff5f73";
+
+
+  ctx.beginPath();
+
+  ctx.arc(
+    248,
+    39,
+    5+
+      Math.sin(
+        world.time*.004
+      )*2,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+
+  ctx.fillStyle=
+    "#7f94ab";
+
+  ctx.font=
+    "10px system-ui";
+
+
+  ctx.fillText(
+    "Собирай заказы, следи за энергией и качай цех",
+    32,
+    57
+  );
+
+
+  drawRoundedRect(
+    792,
+    22,
+    150,
+    68,
+    12,
+    "rgba(6,13,23,.74)",
+    "rgba(255,255,255,.08)"
+  );
+
+
+  ctx.fillStyle=
+    "#71849b";
+
+  ctx.font=
+    "9px system-ui";
+
+
+  ctx.fillText(
+    "SHIFT CONTROL",
+    806,
+    39
+  );
+
+
+  ctx.fillStyle=
+    "#55e68a";
+
+  ctx.font=
+    "800 16px system-ui";
+
+
+  ctx.fillText(
+    Math.round(
+      world.flow
+    )+"%",
+    806,
+    61
+  );
+
+
+  ctx.fillStyle=
+    "#7890a8";
+
+  ctx.font=
+    "9px system-ui";
+
+
+  ctx.fillText(
+    "THROUGHPUT",
+    846,
+    61
+  );
+
+}
+
+
+function updateGame(dt){
+
+  if(!world.running){
+
+    return;
+
+  }
+
+
+  world.time +=
+    dt*1000;
+
+
+  const speedBonus =
+    1 +
+    upgrades.find(
+      u => u.id==="speed"
+    ).level *
+    .14;
+
+
+  const staffBonus =
+    1 +
+    upgrades.find(
+      u => u.id==="staff"
+    ).level *
+    .08;
+
+
+  let activePower =
+    world.boost
+      ? 2.0
+      : 1.0;
+
+
+  world.flow +=
+    dt *
+    5.5 *
+    speedBonus *
+    activePower *
+    staffBonus;
+
+
+  if(world.flow>=100){
+
+    world.flow=0;
+
+    world.orders++;
+
+
+    const payout =
+      Math.round(
+        random(65,130) *
+        (
+          1 +
+          upgrades.find(
+            u => u.id==="quality"
+          ).level *
+          .06
+        )
+      );
+
+
+    world.money +=
+      payout;
+
+    world.revenue +=
+      payout;
+
+    world.collected +=
+      payout;
+
+
+    addParticle(
+      random(120,400),
+      random(150,470),
+      0,
+      -.4,
+      1.3,
+      "+"+payout+" ₽",
+      "#55e68a"
+    );
+
+
+    log(
+      "Заказ завершён: +"+
+      payout+
+      " ₽"
+    );
+
+
+    toast(
+      "Заказ готов: +"+
+      payout+
+      " ₽"
+    );
+
+
+    advanceTasks();
+
+  }
+
+
+  const energySave =
+    1 +
+    upgrades.find(
+      u => u.id==="energy"
+    ).level *
+    .12;
+
+
+  world.energy -=
+    dt *
+    (
+      world.boost
+        ? 4.0
+        : 1.05
+    ) /
+    energySave;
+
+
+  if(world.energy<=0){
+
+    world.energy=0;
+
+    world.boost=false;
+
+    world.running=false;
+
+    ui.statusText.textContent =
+      "Энергия закончилась · нажми «Смена» после восстановления";
+
+
+    toast(
+      "Энергия закончилась"
+    );
+
+  }
+
+
+  if(
+    world.energy<18 &&
+    Math.random()<dt*.4
+  ){
+
+    log(
+      "Внимание: низкий заряд энергосистемы."
+    );
+
+  }
+
+
+  for(
+    const m of world.machines
+  ){
+
+    m.hp -=
+      dt *
+      (
+        world.boost
+          ? .12
+          : .035
+      );
+
+
+    m.hp =
+      clamp(
+        m.hp,
+        30,
+        100
+      );
+
+  }
+
+
+  for(
+    const w of world.workers
+  ){
+
+    updateWorker(
+      w,
+      dt
+    );
+
+  }
+
+
+  if(
+    Math.random()<
+    dt*.15
+  ){
+
+    const x =
+      random(500,850);
+
+    const y =
+      random(190,500);
+
+
+    addParticle(
+      x,
+      y,
+      random(-.12,.12),
+      random(-.7,-.25),
+      .9,
+      "✦",
+      "#58d7ff"
+    );
+
+  }
+
+
+  drawParticles(dt);
+
+  updateUi();
+
+}
+
+
+function advanceTasks(){
+
+  for(
+    const t of taskDefs
+  ){
+
+    if(!t.done){
+
+      t.progress =
+        Math.min(
+          t.need,
+          t.progress+1
+        );
+
+
+      if(t.progress>=t.need){
+
+        t.done=true;
+
+
+        world.money +=
+          t.reward;
+
+
+        world.revenue +=
+          t.reward;
+
+
+        addParticle(
+          260,
+          250,
+          0,
+          -.4,
+          1.4,
+          "ЗАДАНИЕ!",
+          "#ffd45c"
+        );
+
+
+        log(
+          "Задание выполнено: "+
+          t.name+
+          " +"+
+          t.reward+
+          " ₽"
+        );
+
+
+        toast(
+          "Задание выполнено: "+
+          t.name
+        );
+
+      }
+
+      break;
+
+    }
+
+  }
+
+}
+
+
+function render(){
+
+  ctx.clearRect(
+    0,
+    0,
+    world.width,
+    world.height
+  );
+
+
+  drawBackground();
+
+  drawCrates();
+
+  drawForklifts();
+
+  drawMachines();
+
+
+  for(
+    const w of world.workers
+  ){
+
+    drawWorker(w);
+
+  }
+
+
+  for(
+    const m of world.machines
+  ){
+
+    const workersNear =
+      world.workers.some(
+        w =>
+          Math.hypot(
+            w.x-(m.x+m.w/2),
+            w.y-(m.y+m.h/2)
+          )<95
+      );
+
+
+    if(workersNear){
+
+      const gx =
+        m.x+m.w/2;
+
+      const gy =
+        m.y+m.h/2;
+
+
+      const alpha =
+        .03 +
+        .03 *
+        Math.sin(
+          world.time*.008
+        );
+
+
+      ctx.fillStyle=
+        m.color;
+
+      ctx.globalAlpha=
+        alpha;
+
+
+      ctx.beginPath();
+
+      ctx.arc(
+        gx,
+        gy,
+        75,
+        0,
+        Math.PI*2
+      );
+
+      ctx.fill();
+
+      ctx.globalAlpha=1;
+
+    }
+
+  }
+
+
+  drawHudOnCanvas();
+
+}
+
+
+function updateUi(){
+
+  ui.moneyTop.textContent =
+    money(world.money);
+
+
+  ui.dayText.textContent =
+    world.day;
+
+
+  ui.revenue.textContent =
+    money(world.revenue);
+
+
+  ui.orders.textContent =
+    world.orders;
+
+
+  ui.quality.textContent =
+    Math.round(
+      clamp(
+        world.quality+
+        upgrades.find(
+          u => u.id==="quality"
+        ).level *
+        2,
+        0,
+        100
+      )
+    );
+
+
+  ui.energy.textContent =
+    Math.round(
+      world.energy
+    );
+
+
+  ui.flowLabel.textContent =
+    Math.round(
+      world.flow
+    )+"%";
+
+
+  ui.flowBar.style.width =
+    Math.round(
+      world.flow
+    )+"%";
+
+
+  const a =
+    world.machines.find(
+      m => m.id==="press"
+    );
+
+
+  const b =
+    world.machines.find(
+      m => m.id==="cyl"
+    );
+
+
+  const c =
+    world.machines.find(
+      m => m.id==="pack"
+    );
+
+
+  if(a){
+
+    ui.machineA.textContent =
+      Math.round(a.hp)+"%";
+
+
+    ui.machineBarA.style.width =
+      Math.round(a.hp)+"%";
+
+  }
+
+
+  if(b){
+
+    ui.machineB.textContent =
+      Math.round(b.hp)+"%";
+
+
+    ui.machineBarB.style.width =
+      Math.round(b.hp)+"%";
+
+  }
+
+
+  if(c){
+
+    ui.machineC.textContent =
+      Math.round(c.hp)+"%";
+
+
+    ui.machineBarC.style.width =
+      Math.round(c.hp)+"%";
+
+  }
+
+
+  renderTasks();
+
+  renderUpgrades();
+
+}
+
+
+function renderTasks(){
+
+  ui.taskList.innerHTML="";
+
+
+  for(
+    const t of taskDefs
+  ){
+
+    const el =
+      document.createElement("div");
+
+
+    el.className="task";
+
+
+    const pct =
+      Math.round(
+        t.progress/
+        t.need*
+        100
+      );
+
+
+    el.innerHTML =
+      '<span class="dot '+
+      (t.done?"lock":"")+
+      ' '+
+      (t.hot&&!t.done?"hot":"")+
+      '"></span>'+
+      '<span><b style="color:#fff">'+
+      escapeHtml(t.name)+
+      '</b><br>'+
+      '<span style="color:#8194aa">'+
+      t.progress+
+      ' / '+
+      t.need+
+      '</span></span>'+
+      '<b>'+
+      (
+        t.done
+          ? "ГОТОВО"
+          : pct+"%"
+      )+
+      '</b>';
+
+
+    ui.taskList.appendChild(
+      el
+    );
+
+  }
+
+}
+
+
+function renderUpgrades(){
+
+  ui.upgradeList.innerHTML="";
+
+
+  for(
+    const u of upgrades
+  ){
+
+    const el =
+      document.createElement("div");
+
+
+    el.className=
+      "upgrade-item";
+
+
+    const disabled =
+      u.level>=u.max ||
+      world.money<u.cost;
+
+
+    el.innerHTML =
+      '<div><b>'+
+      escapeHtml(u.name)+
+      '</b>'+
+      '<small>'+
+      escapeHtml(u.desc)+
+      ' · ур. '+
+      u.level+
+      '/'+
+      u.max+
+      '</small></div>'+
+      '<button class="btn" '+
+      'style="min-height:40px;padding:6px 10px" '+
+      'data-upgrade="'+
+      u.id+
+      '" '+
+      (
+        disabled
+          ? 'disabled'
+          : ''
+      )+
+      '>'+
+      (
+        u.level>=u.max
+          ? "MAX"
+          : "🪙 "+money(u.cost)
+      )+
+      '</button>';
+
+
+    ui.upgradeList.appendChild(
+      el
+    );
+
+  }
+
+
+  ui.upgradeList
+    .querySelectorAll(
+      "[data-upgrade]"
+    )
+    .forEach(
+      btn => {
+
+        btn.addEventListener(
+          "click",
+          () => {
+
+            buyUpgrade(
+              btn.dataset.upgrade
+            );
+
+          }
+        );
+
+      }
+    );
+
+}
+
+
+function buyUpgrade(id){
+
+  const u =
+    upgrades.find(
+      x => x.id===id
+    );
+
+
+  if(
+    !u ||
+    u.level>=u.max
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    world.money<u.cost
+  ){
+
+    toast(
+      "Недостаточно средств"
+    );
+
+    return;
+
+  }
+
+
+  world.money -=
+    u.cost;
+
+
+  u.level++;
+
+
+  u.cost =
+    Math.round(
+      u.cost*1.55
+    );
+
+
+  log(
+    "Улучшение: "+
+    u.name+
+    " → уровень "+
+    u.level
+  );
+
+
+  toast(
+    "Улучшено: "+
+    u.name
+  );
+
+
+  updateUi();
+
+}
+
+
+function selectAt(
+  worldX,
+  worldY
+){
+
+  world.selectedMachine =
+    null;
+
+
+  for(
+    const m of world.machines
+  ){
+
+    if(
+      worldX>=m.x &&
+      worldX<=m.x+m.w &&
+      worldY>=m.y &&
+      worldY<=m.y+m.h
+    ){
+
+      world.selectedMachine =
+        m.id;
+
+
+      ui.statusText.textContent =
+        m.name+
+        " · "+
+        m.type+
+        " · состояние "+
+        Math.round(m.hp)+
+        "%";
+
+
+      toast(
+        m.name+
+        " · готов к работе"
+      );
+
+
+      return;
+
+    }
+
+  }
+
+
+  ui.statusText.textContent =
+    world.running
+      ? "Смена идёт · производство активно"
+      : "Смена остановлена";
+
+}
+
+
+function canvasPoint(e){
+
+  const rect =
+    canvas.getBoundingClientRect();
+
+
+  const sx =
+    world.width/
+    rect.width;
+
+
+  const sy =
+    world.height/
+    rect.height;
+
+
+  let clientX;
+
+  let clientY;
+
+
+  if(
+    e.touches &&
+    e.touches.length
+  ){
+
+    clientX=
+      e.touches[0].clientX;
+
+    clientY=
+      e.touches[0].clientY;
+
+  }else{
+
+    clientX=
+      e.clientX;
+
+    clientY=
+      e.clientY;
+
+  }
+
+
+  return {
+
+    x:
+      (clientX-rect.left)*
+      sx,
+
+    y:
+      (clientY-rect.top)*
+      sy
+
+  };
+
+}
+
+
+function escapeHtml(s){
+
+  return s.replace(
+    /[&<>"']/g,
+    m =>
+      ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+      }[m])
+  );
+
+}
+
+
+function collect(){
+
+  if(
+    world.collected<=0
+  ){
+
+    toast(
+      "Собирать пока нечего"
+    );
+
+    return;
+
+  }
+
+
+  const amount =
+    world.collected;
+
+
+  world.collected=0;
+
+
+  const bonus =
+    Math.round(
+      amount*.08
+    );
+
+
+  world.money +=
+    bonus;
+
+
+  log(
+    "Склад закрыт: бонус за сбор "+
+    bonus+
+    " ₽"
+  );
+
+
+  toast(
+    "Склад обработан"
+  );
+
+
+  updateUi();
+
+}
+
+
+function toggleRun(){
+
+  if(
+    world.energy<=0
+  ){
+
+    world.energy=100;
+
+  }
+
+
+  world.running =
+    !world.running;
+
+
+  ui.statusText.textContent =
+    world.running
+      ? "Смена идёт · производство активно"
+      : "Смена поставлена на паузу";
+
+
+  toast(
+    world.running
+      ? "Смена возобновлена"
+      : "Смена на паузе"
+  );
+
+}
+
+
+function toggleBoost(){
+
+  if(
+    world.energy<8
+  ){
+
+    toast(
+      "Слишком мало энергии"
+    );
+
+    return;
+
+  }
+
+
+  world.boost =
+    !world.boost;
+
+
+  toast(
+    world.boost
+      ? "Турбо-режим включён"
+      : "Турбо-режим выключен"
+  );
+
+}
+
+
+document
+  .getElementById("btnRun")
+  .addEventListener(
+    "click",
+    toggleRun
+  );
+
+
+document
+  .getElementById("btnBoost")
+  .addEventListener(
+    "click",
+    toggleBoost
+  );
+
+
+document
+  .getElementById("btnCollect")
+  .addEventListener(
+    "click",
+    collect
+  );
+
+
+document
+  .querySelectorAll(".tab")
+  .forEach(
+    tab => {
+
+      tab.addEventListener(
+        "click",
+        () => {
+
+          document
+            .querySelectorAll(".tab")
+            .forEach(
+              x =>
+                x.classList.remove(
+                  "active"
+                )
+            );
+
+
+          document
+            .querySelectorAll(".tab-panel")
+            .forEach(
+              x =>
+                x.classList.remove(
+                  "active"
+                )
+            );
+
+
+          tab.classList.add(
+            "active"
+          );
+
+
+          document
+            .getElementById(
+              "tab-"+tab.dataset.tab
+            )
+            .classList.add(
+              "active"
+            );
+
+        }
+      );
+
+    }
+  );
+
+
+window.addEventListener(
+  "keydown",
+  e => {
+
+    keys[
+      e.key.toLowerCase()
+    ]=true;
+
+
+    if(
+      [
+        " ",
+        "arrowup",
+        "arrowdown",
+        "arrowleft",
+        "arrowright"
+      ].includes(
+        e.key.toLowerCase()
+      )
+    ){
+
+      e.preventDefault();
+
+    }
+
+
+    if(
+      e.key===" "
+    ){
+
+      toggleBoost();
+
+    }
+
+  }
+);
+
+
+window.addEventListener(
+  "keyup",
+  e => {
+
+    keys[
+      e.key.toLowerCase()
+    ]=false;
+
+  }
+);
+
+
+canvas.addEventListener(
+  "click",
+  e => {
+
+    const p =
+      canvasPoint(e);
+
+    selectAt(
+      p.x,
+      p.y
+    );
+
+  }
+);
+
+
+canvas.addEventListener(
+  "touchstart",
+  e => {
+
+    e.preventDefault();
+
+    const p =
+      canvasPoint(e);
+
+    selectAt(
+      p.x,
+      p.y
+    );
+
+  },
+  {
+    passive:false
+  }
+);
+
+
+let last =
+  performance.now();
+
+
+function frame(now){
+
+  const dt =
+    Math.min(
+      .05,
+      (now-last)/1000
+    );
+
+
+  last=now;
+
+
+  if(world.running){
+
+    if(
+      keys["arrowleft"] ||
+      keys["a"]
+    ){
+
+      world.workers[0].x -=
+        2.5;
+
+    }
+
+
+    if(
+      keys["arrowright"] ||
+      keys["d"]
+    ){
+
+      world.workers[0].x +=
+        2.5;
+
+    }
+
+
+    if(
+      keys["arrowup"] ||
+      keys["w"]
+    ){
+
+      world.workers[0].y -=
+        2.5;
+
+    }
+
+
+    if(
+      keys["arrowdown"] ||
+      keys["s"]
+    ){
+
+      world.workers[0].y +=
+        2.5;
+
+    }
+
+
+    world.workers[0].x =
+      clamp(
+        world.workers[0].x,
+        30,
+        930
+      );
+
+
+    world.workers[0].y =
+      clamp(
+        world.workers[0].y,
+        115,
+        555
+      );
+
+  }
+
+
+  updateGame(dt);
+
+  render();
+
+  requestAnimationFrame(
+    frame
+  );
+
+}
+
+
+initWorld();
+
+updateUi();
+
+requestAnimationFrame(
+  frame
+);
+
+
+})();
+</script>
+
+</body>
+</html>
